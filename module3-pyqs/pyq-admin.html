@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — EduExam Hub PYQs</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="pyq-admin.css">
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════════════════════
+       AUTH OVERLAY — shown until correct password entered
+  ══════════════════════════════════════════════════════ -->
+  <div id="authOverlay">
+    <div class="auth-box">
+      <div class="auth-icon">🔐</div>
+      <h2>Admin Access</h2>
+      <p>Enter your admin password to manage PYQ papers.</p>
+      <input type="password" class="auth-input" id="authPassword"
+             placeholder="••••••••" autocomplete="current-password">
+      <div class="auth-error" id="authError">❌ Incorrect password. Please try again.</div>
+      <button class="auth-btn" id="authBtn">
+        <i class="ri-login-circle-line"></i> Sign In
+      </button>
+      <p style="margin-top:18px;font-size:12px;color:rgba(255,255,255,.3)">
+        Default password: <code style="color:#a78bfa">eduexam2024</code>
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       ADMIN APP — hidden until authenticated
+  ══════════════════════════════════════════════════════ -->
+  <div id="adminApp">
+
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="admin-logo">
+        <span class="logo-icon">📋</span>
+        PYQ Admin Dashboard
+      </div>
+      <nav class="admin-nav">
+        <a href="Notes.html" class="admin-back"><i class="ri-arrow-left-line"></i> Back to PYQs</a>
+        <button class="admin-logout" id="logoutBtn"><i class="ri-logout-box-line"></i> Logout</button>
+      </nav>
+    </header>
+
+    <!-- Stats Strip -->
+    <div class="stats-strip" id="statsStrip">
+      <div class="stat-card">
+        <div class="s-icon">📄</div>
+        <div class="s-label">Total Papers</div>
+        <div class="s-value" id="sTotalPapers">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-icon">🎓</div>
+        <div class="s-label">Semesters</div>
+        <div class="s-value">6</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-icon">📚</div>
+        <div class="s-label">Subjects</div>
+        <div class="s-value">30</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-icon">⬇️</div>
+        <div class="s-label">Downloads</div>
+        <div class="s-value" id="sTotalDl">0</div>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="admin-main">
+
+      <!-- ── Upload Panel ──────────────────────────────── -->
+      <aside class="upload-panel">
+        <h2 class="panel-title"><i class="ri-upload-cloud-line"></i> Upload New Paper</h2>
+
+        <form id="uploadForm">
+          <!-- Semester -->
+          <div class="form-group">
+            <label>Semester</label>
+            <select class="form-control" id="semSelect" required>
+              <option value="">— Select Semester —</option>
+              <option value="1">Semester 1</option>
+              <option value="2">Semester 2</option>
+              <option value="3">Semester 3</option>
+              <option value="4">Semester 4</option>
+              <option value="5">Semester 5</option>
+              <option value="6">Semester 6</option>
+            </select>
+          </div>
+
+          <!-- Subject -->
+          <div class="form-group">
+            <label>Subject</label>
+            <select class="form-control" id="subjectSelect" required disabled>
+              <option value="">— Select Semester first —</option>
+            </select>
+          </div>
+
+          <!-- Title -->
+          <div class="form-group">
+            <label>Paper Title</label>
+            <input type="text" class="form-control" id="paperTitle"
+                   placeholder="e.g. Mathematics-I — 2024 Final Exam" required>
+          </div>
+
+          <!-- Year -->
+          <div class="form-group">
+            <label>Exam Year</label>
+            <select class="form-control" id="paperYear" required>
+              <option value="">— Select Year —</option>
+              <option value="2025">2025</option>
+              <option value="2024">2024</option>
+              <option value="2023">2023</option>
+              <option value="2022">2022</option>
+              <option value="2021">2021</option>
+              <option value="2020">2020</option>
+              <option value="2019">2019</option>
+              <option value="2018">2018</option>
+            </select>
+          </div>
+
+          <!-- Exam Type -->
+          <div class="form-group">
+            <label>Exam Type</label>
+            <select class="form-control" id="paperType" required>
+              <option value="">— Select Type —</option>
+              <option value="Final Exam">Final Exam</option>
+              <option value="Mid Term">Mid Term</option>
+              <option value="Supplementary">Supplementary</option>
+              <option value="Practice Set">Practice Set</option>
+            </select>
+          </div>
+
+          <!-- File Size (optional) -->
+          <div class="form-group">
+            <label>File Size (optional)</label>
+            <input type="text" class="form-control" id="paperSize"
+                   placeholder="e.g. 1.2 MB">
+          </div>
+
+          <!-- PDF Link -->
+          <div class="form-group">
+            <label>PDF Link <span style="color:#a78bfa">(Google Drive / OneDrive / etc.)</span></label>
+            <div class="url-input-wrap">
+              <i class="ri-links-line link-icon"></i>
+              <input type="url" class="form-control" id="paperUrl"
+                     placeholder="https://drive.google.com/..." required>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <i class="ri-add-circle-line"></i> Save Paper
+          </button>
+
+          <div class="success-msg" id="successMsg">
+            ✅ Paper uploaded successfully!
+          </div>
+        </form>
+      </aside>
+
+      <!-- ── Papers Table ──────────────────────────────── -->
+      <section class="table-panel">
+        <div class="table-header">
+          <h2 class="panel-title" style="margin-bottom:0">
+            <i class="ri-file-list-3-line"></i> All Uploaded Papers
+          </h2>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+            <div class="table-search">
+              <i class="ri-search-line"></i>
+              <input type="text" id="tableSearch" placeholder="Search papers…">
+            </div>
+            <select class="table-sem-filter" id="semFilter">
+              <option value="All">All Semesters</option>
+              <option value="1">Semester 1</option>
+              <option value="2">Semester 2</option>
+              <option value="3">Semester 3</option>
+              <option value="4">Semester 4</option>
+              <option value="5">Semester 5</option>
+              <option value="6">Semester 6</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto">
+          <table class="papers-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Sem</th>
+                <th>Subject</th>
+                <th>Type</th>
+                <th>Year</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="papersTableBody">
+              <tr class="no-data-row"><td colspan="7">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div><!-- /admin-main -->
+  </div><!-- /adminApp -->
+
+  <!-- ── Scripts ──────────────────────────────────────────── -->
+  <script src="pyq-data.js"></script>
+  <script>
+  (() => {
+    const ADMIN_PASSWORD = 'eduexam2024';
+    const AUTH_KEY = 'eduexam_admin_auth';
+
+    // ── Auth ─────────────────────────────────────────────────
+    function checkAuth() {
+      if (sessionStorage.getItem(AUTH_KEY) === '1') showApp();
+    }
+
+    document.getElementById('authBtn').addEventListener('click', tryLogin);
+    document.getElementById('authPassword').addEventListener('keydown', e => {
+      if (e.key === 'Enter') tryLogin();
+    });
+
+    function tryLogin() {
+      const val = document.getElementById('authPassword').value;
+      if (val === ADMIN_PASSWORD) {
+        sessionStorage.setItem(AUTH_KEY, '1');
+        showApp();
+      } else {
+        document.getElementById('authError').style.display = 'block';
+        document.getElementById('authPassword').value = '';
+        document.getElementById('authPassword').focus();
+      }
+    }
+
+    function showApp() {
+      document.getElementById('authOverlay').style.display = 'none';
+      document.getElementById('adminApp').style.display = 'block';
+      renderStats();
+      renderTable();
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      sessionStorage.removeItem(AUTH_KEY);
+      location.reload();
+    });
+
+    checkAuth();
+
+    // ── Subject dropdown ─────────────────────────────────────
+    document.getElementById('semSelect').addEventListener('change', function () {
+      const subSel = document.getElementById('subjectSelect');
+      const subjects = PYQ.SUBJECTS_BY_SEM[this.value] || [];
+      if (!subjects.length) {
+        subSel.innerHTML = '<option value="">— Select Semester first —</option>';
+        subSel.disabled  = true;
+        return;
+      }
+      subSel.innerHTML = '<option value="">— Select Subject —</option>' +
+        subjects.map(s => `<option value="${s}">${s.replace(/-/g,' ')}</option>`).join('');
+      subSel.disabled = false;
+    });
+
+    // ── Upload form ──────────────────────────────────────────
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('.submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="ri-loader-4-line"></i> Saving…';
+
+      const paper = {
+        sem:     document.getElementById('semSelect').value,
+        subject: document.getElementById('subjectSelect').value,
+        title:   document.getElementById('paperTitle').value.trim(),
+        year:    document.getElementById('paperYear').value,
+        type:    document.getElementById('paperType').value,
+        size:    document.getElementById('paperSize').value.trim() || '—',
+        url:     document.getElementById('paperUrl').value.trim(),
+        date:    new Date().toISOString().split('T')[0],
+      };
+
+      setTimeout(() => {
+        PYQ.savePaper(paper);
+        renderStats();
+        renderTable();
+
+        const msg = document.getElementById('successMsg');
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 3000);
+
+        this.reset();
+        document.getElementById('subjectSelect').disabled = true;
+        document.getElementById('subjectSelect').innerHTML = '<option value="">— Select Semester first —</option>';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ri-add-circle-line"></i> Save Paper';
+      }, 600);
+    });
+
+    // ── Stats ────────────────────────────────────────────────
+    function renderStats() {
+      const all = PYQ.getAllPapers();
+      document.getElementById('sTotalPapers').textContent = all.length;
+      const counts = JSON.parse(localStorage.getItem('eduexam_pyq_downloads') || '{}');
+      const totalDl = Object.values(counts).reduce((s, v) => s + v, 0);
+      document.getElementById('sTotalDl').textContent = totalDl;
+    }
+
+    // ── Table ─────────────────────────────────────────────────
+    let tableQuery  = '';
+    let tableSemFil = 'All';
+
+    document.getElementById('tableSearch').addEventListener('input', e => {
+      tableQuery = e.target.value.toLowerCase();
+      renderTable();
+    });
+    document.getElementById('semFilter').addEventListener('change', e => {
+      tableSemFil = e.target.value;
+      renderTable();
+    });
+
+    function renderTable() {
+      const all = PYQ.getAllPapers();
+      const filtered = all.filter(p => {
+        const matchSem = tableSemFil === 'All' || p.sem === tableSemFil;
+        const matchQ   = !tableQuery ||
+          p.title.toLowerCase().includes(tableQuery) ||
+          p.subject.toLowerCase().includes(tableQuery) ||
+          p.year.includes(tableQuery);
+        return matchSem && matchQ;
+      });
+
+      const tbody = document.getElementById('papersTableBody');
+      if (!filtered.length) {
+        tbody.innerHTML = `<tr class="no-data-row"><td colspan="7">No papers found. Upload the first one! 📭</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.slice().reverse().map(p => {
+        const dateStr = p.date
+          ? new Date(p.date).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'})
+          : '—';
+        const badgeCls = PYQ.getTypeBadgeClass(p.type);
+        const subDisplay = p.subject.replace(/-/g,' ');
+        return `
+          <tr>
+            <td class="td-title" title="${p.title}">${p.title}</td>
+            <td class="td-sem">Sem ${p.sem}</td>
+            <td class="td-sub" title="${subDisplay}">${subDisplay}</td>
+            <td><span class="badge-sm ${badgeCls}">${p.type}</span></td>
+            <td>${p.year}</td>
+            <td class="td-date">${dateStr}</td>
+            <td style="display:flex;gap:6px;align-items:center">
+              <a href="${p.url}" target="_blank" class="btn-link" title="Preview">
+                <i class="ri-external-link-line"></i>
+              </a>
+              <button class="btn-del" onclick="confirmDelete('${p.id}')">
+                <i class="ri-delete-bin-5-line"></i> Del
+              </button>
+            </td>
+          </tr>`;
+      }).join('');
+    }
+
+    window.confirmDelete = function(id) {
+      if (confirm('Delete this paper? This cannot be undone.')) {
+        PYQ.deletePaper(id);
+        renderStats();
+        renderTable();
+      }
+    };
+
+  })();
+  </script>
+
+</body>
+</html>

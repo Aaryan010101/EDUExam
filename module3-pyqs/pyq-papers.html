@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Browse and download previous year question papers — EduExam Hub PYQ Section">
+  <title>PYQ Papers — EduExam Hub</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="pyq-papers.css">
+</head>
+
+<body>
+  <!-- Ambient glow blob -->
+  <div class="header-blob"></div>
+
+  <!-- ── Navbar ──────────────────────────────────────────── -->
+  <app-navbar></app-navbar>
+
+  <!-- ── Page Hero ───────────────────────────────────────── -->
+  <div class="page-hero">
+    <div class="breadcrumb">
+      <a href="../module3-pyqs/Notes.html"><i class="ri-home-4-line"></i> PYQs</a>
+      <span>›</span>
+      <span id="breadSem">Semester ?</span>
+      <span>›</span>
+      <span id="breadSubject">Subject</span>
+    </div>
+
+    <div id="semBadge" class="sem-badge">📚 Semester ?</div>
+    <h1 id="pageTitle" class="page-title">Loading Papers...</h1>
+    <p class="page-subtitle">Download previous year question papers for your exam preparation.</p>
+
+    <div class="stats-row">
+      <div class="stat-pill"><i class="ri-file-pdf-line" style="color:#ff3cac"></i> <strong id="statTotal">0</strong>&nbsp;Papers</div>
+      <div class="stat-pill"><i class="ri-calendar-line" style="color:#12f7ff"></i> Latest: <strong id="statLatest">—</strong></div>
+      <div class="stat-pill"><i class="ri-download-cloud-line" style="color:#38BDF8"></i> <strong id="statDownloads">0</strong>&nbsp;Downloads</div>
+    </div>
+  </div>
+
+  <!-- ── Controls Bar ─────────────────────────────────────── -->
+  <div class="controls-bar">
+    <div class="search-wrap">
+      <i class="ri-search-line search-icon"></i>
+      <input type="text" id="searchInput" placeholder="Search papers by title or year..." autocomplete="off">
+    </div>
+    <div class="filters" id="filterBtns">
+      <button class="filter-btn active" data-filter="All">All Papers</button>
+      <button class="filter-btn" data-filter="Final Exam">🎓 Final Exam</button>
+      <button class="filter-btn" data-filter="Mid Term">📝 Mid Term</button>
+      <button class="filter-btn" data-filter="Supplementary">🔄 Supplementary</button>
+    </div>
+  </div>
+
+  <!-- ── Papers List ──────────────────────────────────────── -->
+  <main class="papers-container" id="papersContainer">
+    <!-- Cards injected by JS -->
+  </main>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="emptyState">
+    <div class="empty-icon">📭</div>
+    <h3>No papers found</h3>
+    <p>Try a different search or filter, or ask your admin to upload papers.</p>
+  </div>
+
+  <!-- ── Admin FAB ────────────────────────────────────────── -->
+  <a href="pyq-admin.html" class="admin-fab" id="adminFab" title="Admin Panel">
+    <i class="ri-admin-line"></i>
+    <span>Admin Panel</span>
+  </a>
+
+  <!-- ── Footer ───────────────────────────────────────────── -->
+  <footer class="footer-animate xl:px-16 md:px-8 px-6 py-8 relative">
+    <div class="footer-gradient"></div>
+
+    <div class="2xl:max-w-[1280px] md:max-w-3xl lg:max-w-7xl mx-auto flex flex-col gap-8">
+      <div class="flex items-center justify-between flex-wrap gap-5">
+        <h2 class="font-bold md:text-[40px] text-[30px] dark:text-white">Let's Study Together</h2>
+      </div>
+
+      <section class="overflow-hidden">
+        <div class="flex flex-col gap-12 w-full">
+          <div class="flex flex-wrap gap-12">
+            <div class="footer_column">
+              <h2>EduExam Hub</h2>
+              <a href="#">About</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Support</a>
+              <a href="#">Privacy Policy</a>
+            </div>
+            <div class="footer_column">
+              <h2>Quick Links</h2>
+              <a href="../module3-pyqs/Notes.html">PYQ Section</a>
+              <a href="../module1-books/Notes.html">Books</a>
+              <a href="../module2-notes/Notes.html">Notes</a>
+              <a href="../module4-quiz/quiz.html">Quiz</a>
+            </div>
+            <div class="footer_column">
+              <h2>Our Services</h2>
+              <a href="#">Books Photo</a>
+              <a href="#">Subject Notes</a>
+              <a href="#">Past Year Papers</a>
+              <a href="#">Quiz</a>
+              <a href="#">AI Chatbot</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="flex flex-col">
+        <div class="mb-[50px] h-[2px] bg-white opacity-10"></div>
+        <div class="flex items-center pb-20 md:pb-0 justify-between flex-wrap gap-6">
+          <h2 class="font-extrabold text-[24px] dark:text-white">
+            <a style="font-size:3rem;font-weight:700;color:#38BDF8;font-family:'Times New Roman',serif;text-shadow:0 0 0.9px #38BDF8">E</a>duExam
+            <a style="color:#38BDF8">H</a>ub
+          </h2>
+          <p class="font-medium text-[14px] dark:text-white opacity-50">Copyright © 2025 EduExam Hub. All rights reserved.</p>
+          <div class="social-icons hidden dark:flex">
+            <a href="#"><i class='bx bxl-facebook'></i></a>
+            <a href="#"><i class='bx bxl-instagram'></i></a>
+            <a href="#"><i class='bx bxl-twitter'></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── Scripts ──────────────────────────────────────────── -->
+  <script src="../js/components/Navbar.js"></script>
+  <script src="pyq-data.js"></script>
+  <script>
+  (() => {
+    // ── Parse URL params ─────────────────────────────────────
+    const params  = new URLSearchParams(location.search);
+    const sem     = params.get('sem')     || '1';
+    const subject = params.get('subject') || 'Unknown';
+    const semLabel = `Semester ${sem}`;
+    const subjectDisplay = subject.replace(/-/g, ' ');
+
+    // ── Set page metadata ────────────────────────────────────
+    document.title = `${subjectDisplay} PYQs | Sem-${sem} — EduExam Hub`;
+    document.getElementById('breadSem').textContent     = semLabel;
+    document.getElementById('breadSubject').textContent = subjectDisplay;
+    document.getElementById('semBadge').textContent     = `📚 ${semLabel}`;
+    document.getElementById('pageTitle').textContent    = `${subjectDisplay} — Past Papers`;
+
+    // ── State ────────────────────────────────────────────────
+    let allPapers = [];
+    let activeFilter = 'All';
+    let searchQuery  = '';
+
+    // ── Render ───────────────────────────────────────────────
+    function render() {
+      let filtered = allPapers.filter(p => {
+        const matchFilter = activeFilter === 'All' || p.type === activeFilter;
+        const q = searchQuery.toLowerCase();
+        const matchSearch = !q ||
+          p.title.toLowerCase().includes(q) ||
+          p.year.includes(q) ||
+          p.type.toLowerCase().includes(q);
+        return matchFilter && matchSearch;
+      });
+
+      const container = document.getElementById('papersContainer');
+      const empty     = document.getElementById('emptyState');
+
+      container.innerHTML = '';
+      if (!filtered.length) {
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      filtered.forEach((paper, i) => {
+        const dlCount = PYQ.getDownloadCount(paper.id);
+        const badgeClass = PYQ.getTypeBadgeClass(paper.type);
+        const dateStr = paper.date
+          ? new Date(paper.date).toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'})
+          : 'N/A';
+
+        const card = document.createElement('div');
+        card.className = 'paper-card';
+        card.style.animationDelay = `${i * 0.07}s`;
+        card.innerHTML = `
+          <div class="paper-icon">📄</div>
+          <div class="paper-info">
+            <div class="paper-title">${paper.title}</div>
+            <div class="paper-meta">
+              <span class="badge ${badgeClass}">${paper.type}</span>
+              <span class="meta-dot">•</span>
+              <span class="paper-date"><i class="ri-calendar-2-line"></i> ${dateStr}</span>
+              ${paper.size ? `<span class="meta-dot">•</span><span class="paper-size"><i class="ri-file-line"></i> ${paper.size}</span>` : ''}
+              <span class="meta-dot">•</span>
+              <span class="paper-dl"><i class="ri-download-line"></i> ${dlCount} downloads</span>
+            </div>
+          </div>
+          <div class="paper-actions">
+            <a href="${paper.url}" target="_blank" rel="noopener" class="btn-view">
+              <i class="ri-eye-line"></i> Preview
+            </a>
+            <button class="btn-download" onclick="handleDownload('${paper.id}', '${paper.url}', '${paper.title.replace(/'/g,"\\'")}', this)">
+              <i class="ri-download-cloud-line"></i> Download
+            </button>
+          </div>`;
+        container.appendChild(card);
+      });
+    }
+
+    // ── Stats bar ────────────────────────────────────────────
+    function updateStats() {
+      document.getElementById('statTotal').textContent = allPapers.length;
+      const totalDl = allPapers.reduce((sum, p) => sum + PYQ.getDownloadCount(p.id), 0);
+      document.getElementById('statDownloads').textContent = totalDl;
+      if (allPapers.length) {
+        const latest = allPapers.reduce((a, b) => (a.date > b.date ? a : b));
+        document.getElementById('statLatest').textContent = latest.year;
+      }
+    }
+
+    // ── Download handler ─────────────────────────────────────
+    window.handleDownload = function(id, url, title, btn) {
+      PYQ.incrementDownload(id);
+      // Update counter in this card
+      const dlSpan = btn.closest('.paper-card').querySelector('.paper-dl');
+      if (dlSpan) dlSpan.innerHTML = `<i class="ri-download-line"></i> ${PYQ.getDownloadCount(id)} downloads`;
+
+      // Try direct download; fallback to open in new tab
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${title}.pdf`;
+      a.target   = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      // Button feedback
+      btn.innerHTML = `<i class="ri-check-line"></i> Downloading…`;
+      setTimeout(() => {
+        btn.innerHTML = `<i class="ri-download-cloud-line"></i> Download`;
+      }, 2000);
+    };
+
+    // ── Filter buttons ───────────────────────────────────────
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        render();
+      });
+    });
+
+    // ── Search ───────────────────────────────────────────────
+    document.getElementById('searchInput').addEventListener('input', e => {
+      searchQuery = e.target.value;
+      render();
+    });
+
+    // ── Footer animation ─────────────────────────────────────
+    const footer = document.querySelector('.footer-animate');
+    if (footer) {
+      new IntersectionObserver(([entry]) => {
+        footer.classList.toggle('show', entry.isIntersecting);
+      }, { threshold: 0.1 }).observe(footer);
+    }
+
+    // ── Load data ────────────────────────────────────────────
+    allPapers = PYQ.getPapers(sem, subject);
+    updateStats();
+    render();
+
+  })();
+  </script>
+</body>
+</html>

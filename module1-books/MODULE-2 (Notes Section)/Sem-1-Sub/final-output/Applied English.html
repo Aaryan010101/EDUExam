@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Royal Notes Course App</title>
+
+<style>
+/* ===== RESET & MOBILE TAP FIX ===== */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-focus-ring-color: transparent;
+}
+body{
+  font-family:Poppins,Arial,sans-serif;
+  background:#292e33;
+  color:#e5e7eb;
+  user-select:none;
+}
+
+/* ===== Layout ===== */
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* ===== Sidebar ===== */
+.sidebar{
+  width:280px;
+  background:linear-gradient(180deg,#1b0717fe,#12040f);
+  padding:20px;
+  overflow-y:auto;
+  position:fixed;
+  inset:0 auto 0 0;
+  z-index:1000;
+}
+.sidebar h2{font-size:22px;margin-bottom:18px}
+.progress{height:6px;background:#1f2933;border-radius:10px;overflow:hidden;margin-bottom:18px}
+.progress span{display:block;height:100%;width:40%;background:#12f7ff}
+.section{
+  background:rgba(255,255,255,.06);
+  padding:14px;
+  border-radius:10px;
+  margin-bottom:10px;
+  cursor:pointer;
+}
+.section.active,.section:hover{background:rgba(18,247,255,.18)}
+.close-side{
+  display:none;
+  font-size:22px;
+  cursor:pointer;
+  position:absolute;
+  top:16px;
+  right:16px;
+  color:#12f7ff;
+}
+
+/* ===== Main ===== */
+.main{flex:1;margin-left:280px;display:flex;flex-direction:column}
+
+/* ===== Topbar ===== */
+.topbar{
+  background:#111827;
+  padding:14px 20px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* ===== Professional Brand ===== */
+.brand-title{
+  font-size:36px;
+  font-weight:800;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  position:relative;
+}
+.brand-e{
+  font-family:"Times New Roman",serif;
+  font-size:46px;
+  color:#12f7ff;
+}
+.brand-accent{color:#12f7ff}
+.brand-title::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-6px;
+  transform:translateX(-50%);
+  width:70%;
+  height:3px;
+  background:linear-gradient(90deg,transparent,#12f7ff,transparent);
+  border-radius:10px;
+}
+
+/* ===== Viewer ===== */
+.viewer{flex:1;background:#1f2933;overflow:auto;padding:20px}
+.notes-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+/* ===== Notes Image + Ripple ===== */
+.note-img{
+  width:100%;
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,.5);
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+.note-img .ripple{
+  position:absolute;
+  border-radius:50%;
+  transform:scale(0);
+  animation:rippleAnim .6s ease-out;
+  background:rgba(18,247,255,.35);
+  pointer-events:none;
+}
+@keyframes rippleAnim{
+  to{
+    transform:scale(4);
+    opacity:0;
+  }
+}
+
+/* ===== Modal ===== */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.92);
+  justify-content:center;
+  align-items:center;
+  z-index:3000;
+}
+.modal img{
+  max-width:95%;
+  max-height:95%;
+  transition:transform .2s ease;
+}
+.close-modal{
+  position:absolute;
+  top:20px;
+  right:30px;
+  font-size:32px;
+  color:#12f7ff;
+  cursor:pointer;
+}
+
+/* ===== Zoom Controls ===== */
+.zoom-controls{
+  position:absolute;
+  bottom:30px;
+  display:flex;
+  gap:14px;
+}
+.zoom-controls button{
+  background:#12f7ff;
+  color:#021014;
+  border:none;
+  font-size:20px;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+/* ===== Menu Button ===== */
+.menu-btn{
+  display:none;
+  position:fixed;
+  top:14px;
+  left:14px;
+  background:#12f7ff;
+  color:#021014;
+  border:none;
+  padding:10px 14px;
+  border-radius:12px;
+  font-weight:600;
+  z-index:4000;
+}
+.menu-btn.hide{display:none!important}
+
+/* ===== Mobile ===== */
+@media(max-width:768px){
+  .sidebar{left:-300px;transition:.35s}
+  .sidebar.show{left:0}
+  .close-side{display:block}
+  .menu-btn{display:block}
+  .main{margin-left:0}
+  .notes-grid{grid-template-columns:repeat(2,1fr)}
+  .brand-title{font-size:28px;
+                margin-left: 50px;
+                    }
+  .brand-e{font-size:36px}
+}
+@media(max-width:480px){
+  .notes-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body oncontextmenu="return false">
+
+<button class="menu-btn" id="menuBtn" onclick="openSidebar()">☰ Menu</button>
+
+<div class="app">
+
+  <div class="sidebar" id="sidebar">
+    <span class="close-side" onclick="closeSidebar()">✖</span>
+    <h2>E-Commerce</h2>
+    <div class="progress"><span></span></div>
+
+    <div class="section active" onclick="loadNotes('html',this)">UNIT-1</div>
+    <div class="section" onclick="loadNotes('css',this)">UNIT-2</div>
+    <div class="section" onclick="loadNotes('js',this)">UNIT-3</div>
+    <div class="section" onclick="loadNotes('react',this)">UNIT-4</div>
+
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <h1 class="brand-title">
+        <span class="brand-e">E</span>du<span class="brand-accent">Exam</span> Hub
+      </h1>
+    </div>
+
+    <div class="viewer">
+      <div id="content" class="notes-grid"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== Modal ===== -->
+<div class="modal" id="modal">
+  <span class="close-modal" onclick="closeModal()">×</span>
+  <img id="modalImg">
+
+  <div class="zoom-controls">
+    <button onclick="zoomIn()">+</button>
+    <button onclick="zoomOut()">−</button>
+    <button onclick="resetZoom()">⟳</button>
+  </div>
+</div>
+
+<script>
+const notes={
+  html:Array(9).fill('images/12.jpg'),
+  css:Array(6).fill('images/12.jpg'),
+  js:Array(4).fill('images/12.jpg'),
+  react:Array(2).fill('images/12.jpg'),
+};
+
+let scale=1;
+
+/* ===== Subtle Vibration ===== */
+function vibrateTap(){
+  if(navigator.vibrate){
+    navigator.vibrate(15); // subtle haptic
+  }
+}
+
+function loadNotes(topic,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+
+  const box=document.getElementById('content');
+  box.innerHTML='';
+
+  notes[topic].forEach(src=>{
+    const img=document.createElement('img');
+    img.src=src;
+    img.className='note-img';
+
+    img.onclick=(e)=>{
+      vibrateTap();
+
+      const old=img.querySelector('.ripple');
+      if(old) old.remove();
+
+      const ripple=document.createElement('span');
+      ripple.className='ripple';
+
+      const rect=img.getBoundingClientRect();
+      const size=Math.max(rect.width,rect.height);
+      ripple.style.width=ripple.style.height=size+'px';
+      ripple.style.left=(e.clientX-rect.left-size/2)+'px';
+      ripple.style.top=(e.clientY-rect.top-size/2)+'px';
+
+      img.appendChild(ripple);
+
+      setTimeout(()=>openModal(src),150);
+    };
+
+    box.appendChild(img);
+  });
+
+  closeSidebar();
+}
+
+function openModal(src){
+  modal.style.display='flex';
+  modalImg.src=src;
+  scale=1;
+  modalImg.style.transform='scale(1)';
+}
+function closeModal(){modal.style.display='none'}
+
+function zoomIn(){
+  scale=Math.min(scale+0.2,4);
+  modalImg.style.transform=`scale(${scale})`;
+}
+function zoomOut(){
+  scale=Math.max(scale-0.2,1);
+  modalImg.style.transform=`scale(${scale})`;
+}
+function resetZoom(){
+  scale=1;
+  modalImg.style.transform='scale(1)';
+}
+
+function openSidebar(){
+  sidebar.classList.add('show');
+  menuBtn.classList.add('hide');
+}
+function closeSidebar(){
+  sidebar.classList.remove('show');
+  menuBtn.classList.remove('hide');
+}
+
+/* Init */
+loadNotes('html',document.querySelector('.section'));
+</script>
+
+</body>
+</html>
